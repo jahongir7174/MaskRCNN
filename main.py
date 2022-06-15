@@ -52,8 +52,8 @@ def train(args):
 
     cfg.device = get_device()
 
-    cfg.seed = args.local_rank
-    meta['seed'] = args.local_rank
+    cfg.seed = 0
+    meta['seed'] = 0
     meta['exp_name'] = os.path.basename(args.config)
 
     model = build_detector(cfg.model, cfg.get('train_cfg'), cfg.get('test_cfg'))
@@ -189,7 +189,7 @@ def main():
     args.world_size = int(os.getenv('WORLD_SIZE', 1))
     args.distributed = int(os.getenv('WORLD_SIZE', 1)) > 1
 
-    set_random_seed(0, True)
+    set_random_seed(0, deterministic=True)
 
     if args.train:
         train(args)
