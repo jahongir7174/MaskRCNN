@@ -14,7 +14,7 @@
 |  Detector  | Backbone | Neck | LR Schedule | Box mAP | Mask mAP | Config |
 |:----------:|:--------:|:----:|:-----------:|--------:|---------:|-------:|
 | Mask R-CNN |  Swin-T  | FPN  |     1x      |    42.8 |     39.4 |  exp01 |
-| Mask R-CNN |  Swin-T  | FPN  |     1x      |       - |        - |  exp02 |
+| Mask R-CNN |  Swin-T  | FPN  |     1x      |    42.8 |     39.4 |  exp02 |
 | Mask R-CNN |  Swin-T  | FPN  |     3x      |       - |        - |  exp03 |
 | Mask R-CNN |  Swin-T  | FPN  |     3x      |       - |        - |  exp04 |
 
