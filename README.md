@@ -15,7 +15,7 @@
 |:----------:|:--------:|:----:|:-----------:|--------:|---------:|-------:|
 | Mask R-CNN |  Swin-T  | FPN  |     1x      |    42.8 |     39.4 |  exp01 |
 | Mask R-CNN |  Swin-T  | FPN  |     1x      |    42.8 |     39.4 |  exp02 |
-| Mask R-CNN |  Swin-T  | FPN  |     3x      |       - |        - |  exp03 |
+| Mask R-CNN |  Swin-T  | FPN  |     3x      |    45.5 |     42.0 |  exp03 |
 | Mask R-CNN |  Swin-T  | FPN  |     3x      |       - |        - |  exp04 |
 
 ### TODO
