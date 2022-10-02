@@ -900,3 +900,45 @@ class RandomAugment:
 
         results['img'] = image
         return results
+
+
+@PIPELINES.register_module()
+class GridMask:
+    def __init__(self, p=0.5):
+        self.p = p
+
+    def __call__(self, results):
+        if random.random() > self.p:
+            return results
+
+        image = results['img']
+        shape = results['img_shape'][:2]
+
+        h = int(shape[0] * 1.5)
+        w = int(shape[1] * 1.5)
+        d = numpy.random.randint(2, min(shape))
+
+        st_h = numpy.random.randint(d)
+        st_w = numpy.random.randint(d)
+        mask = numpy.ones((h, w), numpy.float32)
+
+        for i in range(h // d):
+            s = d * i + st_h
+            t = min(s + min(max(int(d / 2 + 0.5), 1), d - 1), h)
+            mask[s:t, :] *= 0
+
+        for i in range(w // d):
+            s = d * i + st_w
+            t = min(s + min(max(int(d / 2 + 0.5), 1), d - 1), w)
+            mask[:, s:t] *= 0
+
+        delta_h = (h - shape[0]) // 2
+        delta_w = (w - shape[1]) // 2
+
+        mask = mask[delta_h:delta_h + shape[0], delta_w:delta_w + shape[1]]
+
+        mask = 1 - mask.astype(numpy.float32)
+        mask = numpy.expand_dims(mask, 2).repeat(3, axis=2)
+
+        results['img'] = (image * mask).astype('uint8')
+        return results
