@@ -9,7 +9,8 @@ from utils import util
 
 @DATASETS.register_module()
 class MOSAICDataset:
-    def __init__(self, dataset, image_sizes, pipeline):
+    def __init__(self, dataset, image_sizes, pipeline, p=0.5):
+        self.p = p
         self.dataset = dataset
         self.CLASSES = dataset.CLASSES
         self.pipeline = Compose(pipeline)
@@ -24,7 +25,7 @@ class MOSAICDataset:
 
     def __getitem__(self, index):
         while True:
-            if random.random() > 0.25:
+            if random.random() > self.p:
                 data = util.mosaic(self, index)
             else:
                 data = util.mix_up(self, index, random.choice(self.indices))
