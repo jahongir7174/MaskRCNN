@@ -206,6 +206,7 @@ def main():
     parser.add_argument('--train', action='store_true')
     parser.add_argument('--test', action='store_true')
     parser.add_argument('--fps', action='store_true')
+    parser.add_argument('--local_rank', type=int)
 
     args = parser.parse_args()
 
