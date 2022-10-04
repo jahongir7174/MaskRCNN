@@ -11,6 +11,9 @@ from mmdet.datasets.pipelines.transforms import PIPELINES
 
 max_value = 10.
 
+# prevent OpenCV from multithreading (incompatible with PyTorch DataLoader)
+cv2.setNumThreads(0)
+
 
 def resample():
     return random.choice((cv2.INTER_LINEAR, cv2.INTER_CUBIC))
