@@ -1,23 +1,26 @@
-import argparse
-import copy
-import os
-import time
 import warnings
 
-import mmcv
-import torch
-from mmcv import Config
-from mmcv.runner import init_dist
-from mmdet.apis import set_random_seed, train_detector
-from mmdet.utils import collect_env, get_device, get_root_logger, setup_multi_processes
+import cv2
 
-from nets.nn import build_detector
-from utils.dataset import build_dataset
-
+cv2.setNumThreads(0)
 warnings.filterwarnings("ignore")
 
 
 def train(args):
+    import copy
+    import os
+
+    import mmcv
+    from mmcv import Config
+    from mmcv.runner import init_dist
+    from mmdet.apis import set_random_seed, train_detector
+    from mmdet.utils import collect_env, get_device, get_root_logger, setup_multi_processes
+
+    from nets.nn import build_detector
+    from utils.dataset import build_dataset
+
+    set_random_seed(0, deterministic=True)
+
     cfg = Config.fromfile(args.config)
     # set multiprocess settings
     setup_multi_processes(cfg)
@@ -75,6 +78,15 @@ def train(args):
 
 
 def test(args):
+    import os
+
+    import torch
+    from mmcv import Config
+    from mmcv.runner import init_dist
+    from mmdet.utils import setup_multi_processes
+
+    from nets.nn import build_detector
+    from utils.dataset import build_dataset
     from mmdet.apis import multi_gpu_test, single_gpu_test
     from mmdet.datasets import build_dataloader, replace_ImageToTensor
     from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
@@ -124,6 +136,15 @@ def test(args):
 
 
 def fps(args):
+    import time
+
+    import torch
+    from mmcv import Config
+    from mmcv.runner import init_dist
+    from mmdet.utils import setup_multi_processes
+
+    from nets.nn import build_detector
+    from utils.dataset import build_dataset
     from mmcv.runner import wrap_fp16_model
     from mmcv.parallel import MMDataParallel
     from mmcv.parallel import MMDistributedDataParallel
@@ -177,19 +198,20 @@ def fps(args):
 
 
 def main():
+    import os
+    import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument('config', help='train config file path')
     parser.add_argument('--train', action='store_true')
     parser.add_argument('--test', action='store_true')
     parser.add_argument('--fps', action='store_true')
-    parser.add_argument('--local_rank', default=0, type=int)
 
     args = parser.parse_args()
 
+    args.local_rank = int(os.getenv('LOCAL_RANK', 1))
     args.world_size = int(os.getenv('WORLD_SIZE', 1))
     args.distributed = int(os.getenv('WORLD_SIZE', 1)) > 1
-
-    set_random_seed(0, deterministic=True)
 
     if args.train:
         train(args)
